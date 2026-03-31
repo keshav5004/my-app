@@ -1,0 +1,56 @@
+{
+  "addrCount": 6,
+  "sampleAddresses": [
+    {
+      "_id": "68ecaa44642bd57e4e93eace",
+      "userId": "68e8fa188a9d766e2df7c2fc",
+      "name": "keshav singh",
+      "email": "keshavsingh5004@gmail.com",
+      "phone": "08420531531",
+      "address": "gdfdbv bfbf",
+      "city": "kolkata",
+      "state": "west bengal",
+      "postalCode": "700023",
+      "country": "India",
+      "isDefault": true,
+      "addressType": "home",
+      "createdAt": "2025-10-13T07:29:08.526Z",
+      "updatedAt": "2025-10-13T07:29:08.526Z",
+      "__v": 0
+    },
+    {
+      "_id": "68ecadbf4b2148e4390a242e",
+      "userId": "68e8f56a8a9d766e2df7c2f9",
+      "name": "keshav singh",
+      "email": "keshavsingh5004@gmail.com",
+      "phone": "08420531531",
+      "address": "49/5/1v karl marx sarani,  khidderpore , kolkata ",
+      "city": "kolkata",
+      "state": "west bengal",
+      "postalCode": "700023",
+      "country": "India",
+      "isDefault": true,
+      "addressType": "home",
+      "createdAt": "2025-10-13T07:43:59.198Z",
+      "updatedAt": "2025-10-15T10:53:35.058Z",
+      "__v": 0
+    },
+    {
+      "_id": "69035d5a5c771fe87adeb180",
+      "userId": "6903563d6c66094e09f5b279",
+      "name": "keshav singh",
+      "email": "keshavsingh5004@gmail.com",
+      "phone": "08420531531",
+      "address": "gdfdbv bfbf",
+      "city": "kolkata",
+      "state": "west bengal",
+      "postalCode": "700023",
+      "country": "India",
+      "isDefault": true,
+      "addressType": "home",
+      "createdAt": "2025-10-30T12:43:06.832Z",
+      "updatedAt": "2025-10-30T12:43:06.832Z",
+      "__v": 0
+    }
+  ]
+}

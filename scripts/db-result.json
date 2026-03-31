@@ -1,0 +1,30 @@
+{
+  "collections": [
+    "addresses",
+    "users",
+    "admins",
+    "orders",
+    "products"
+  ],
+  "userCount": 14,
+  "sampleUsers": [
+    {
+      "_id": "68e8f56a8a9d766e2df7c2f9",
+      "name": "keshav singh",
+      "email": "keshavsingh5004@gmail.com",
+      "password": "[REDACTED]",
+      "createdAt": "2025-10-10T12:00:42.535Z",
+      "updatedAt": "2025-11-03T08:42:30.365Z",
+      "__v": 0
+    },
+    {
+      "_id": "68e8fa188a9d766e2df7c2fc",
+      "name": "sumit singh",
+      "email": "sumitsingh091785@gmail.com",
+      "password": "[REDACTED]",
+      "createdAt": "2025-10-10T12:20:40.173Z",
+      "updatedAt": "2025-11-06T12:29:34.571Z",
+      "__v": 0
+    }
+  ]
+}
