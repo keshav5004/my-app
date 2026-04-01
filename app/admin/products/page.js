@@ -148,11 +148,11 @@ export default function ProductsPage() {
         formData.append("img", form.img);
       }
 
-      let url = "/api/products";
+      let url = "http://localhost:3000/api/admin/products";
       let method = "POST";
 
       if (editingProduct) {
-        url = `/api/products/${editingProduct._id}`;
+        url = `http://localhost:3000/api/admin/products/${editingProduct._id}`;
         method = "PATCH";
       }
 
@@ -181,7 +181,7 @@ export default function ProductsPage() {
     if (!confirm("Are you sure you want to delete this product?")) return;
     setDeleting(id);
     try {
-      const res = await fetch(`/api/products/${id}`, {
+      const res = await fetch(`http://localhost:3000/api/admin/products/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
