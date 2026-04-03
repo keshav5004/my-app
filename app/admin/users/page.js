@@ -181,7 +181,7 @@ export default function UsersPage() {
   return (
     <>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Users Management
@@ -389,7 +389,7 @@ export default function UsersPage() {
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+            <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between px-6 py-4 border-b border-gray-100">
               <div className="flex items-center gap-3">
                 <div
                   className={`w-11 h-11 rounded-full bg-gradient-to-br ${getAvatarColor(
@@ -457,7 +457,7 @@ export default function UsersPage() {
                           <span className="w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center text-xs">👤</span>
                           Personal Information
                         </h3>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <EditField
                             label="Full Name"
                             value={editForm.name}
@@ -482,7 +482,7 @@ export default function UsersPage() {
                           <span className="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center text-xs">📍</span>
                           Contact & Address
                         </h3>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <EditField
                             label="Phone Number"
                             value={editForm.phone}
@@ -553,7 +553,7 @@ export default function UsersPage() {
                     /* ====== VIEW MODE ====== */
                     <div className="space-y-6">
                       {/* Quick Stats */}
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div className="bg-indigo-50 rounded-xl p-4 text-center">
                           <p className="text-2xl font-bold text-indigo-700">
                             {detailData.orderCount}

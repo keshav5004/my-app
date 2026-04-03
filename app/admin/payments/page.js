@@ -107,7 +107,7 @@ export default function PaymentsPage() {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Payment Details
@@ -137,7 +137,7 @@ export default function PaymentsPage() {
       ) : (
         <>
           {/* Stats Cards - Updates based on active tab */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <OverviewCard 
               title="Total Revenue" 
               value={`₹${activeData.stats.totalRevenue.toLocaleString('en-IN')}`} 
@@ -169,7 +169,7 @@ export default function PaymentsPage() {
           </div>
 
           {/* Section Tabs */}
-          <div className="flex gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-6">
             {sections.map((sec) => (
               <button
                 key={sec.key}
@@ -196,7 +196,7 @@ export default function PaymentsPage() {
 
 
           {/* Search + Filters */}
-          <div className="flex gap-3 mb-6 text-black">
+          <div className="flex flex-col sm:flex-row gap-3 mb-6 text-black">
             <div className="relative flex-1">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
               <input
@@ -255,8 +255,8 @@ function PaymentSection({ title, payments, updateStatus }) {
           <p className="text-gray-400 text-sm mt-1">No payment records match your current filters for this period.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-lg shadow-gray-100 overflow-hidden border border-gray-100">
-          <table className="w-full text-sm">
+        <div className="bg-white rounded-xl shadow-lg shadow-gray-100 border border-gray-100 overflow-x-auto">
+          <table className="w-full text-sm min-w-[800px]">
             <thead className="text-left text-gray-500 border-b bg-gray-50/80">
               <tr>
                 <th className="py-3.5 px-4 font-semibold">Payment ID</th>

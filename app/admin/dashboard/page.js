@@ -63,7 +63,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Dashboard Overview
@@ -84,7 +84,7 @@ export default function Dashboard() {
       </div>
 
       {/* Main Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         <StatCard
           icon={Package}
           gradient="from-blue-500 to-indigo-600"
@@ -116,7 +116,7 @@ export default function Dashboard() {
       </div>
 
       {/* Secondary Stats Row */}
-      <div className="grid grid-cols-2 gap-5 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-sm">
             <DollarSign className="w-6 h-6 text-white" />
@@ -140,7 +140,7 @@ export default function Dashboard() {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Order Status Distribution */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
           <h3 className="font-semibold text-gray-800 mb-5">Order Status Distribution</h3>
@@ -195,39 +195,41 @@ export default function Dashboard() {
         </div>
 
         {recentOrders.length > 0 ? (
-          <table className="w-full text-sm">
-            <thead className="text-left border-b border-gray-100">
-              <tr>
-                <th className="py-3 font-semibold text-gray-500 text-xs uppercase tracking-wider">Order ID</th>
-                <th className="font-semibold text-gray-500 text-xs uppercase tracking-wider">Customer</th>
-                <th className="font-semibold text-gray-500 text-xs uppercase tracking-wider">Product</th>
-                <th className="font-semibold text-gray-500 text-xs uppercase tracking-wider">Status</th>
-                <th className="font-semibold text-gray-500 text-xs uppercase tracking-wider">Amount</th>
-                <th className="font-semibold text-gray-500 text-xs uppercase tracking-wider">Date</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-700">
-              {recentOrders.map((order) => (
-                <tr key={order._id} className="border-b border-gray-50 hover:bg-indigo-50/30 transition-colors">
-                  <td className="py-3 text-indigo-600 font-medium text-xs">{order.orderId}</td>
-                  <td className="text-gray-800">{order.customer}</td>
-                  <td className="text-gray-600">
-                    {order.product}
-                    {order.productCount > 1 && (
-                      <span className="text-gray-400 text-xs ml-1">+{order.productCount - 1}</span>
-                    )}
-                  </td>
-                  <td>
-                    <span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold capitalize ${getStatusStyle(order.status)}`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="font-semibold text-gray-800">{formatCurrency(order.amount)}</td>
-                  <td className="text-gray-500 text-xs">{order.date}</td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[600px]">
+              <thead className="text-left border-b border-gray-100">
+                <tr>
+                  <th className="py-3 font-semibold text-gray-500 text-xs uppercase tracking-wider">Order ID</th>
+                  <th className="font-semibold text-gray-500 text-xs uppercase tracking-wider">Customer</th>
+                  <th className="font-semibold text-gray-500 text-xs uppercase tracking-wider">Product</th>
+                  <th className="font-semibold text-gray-500 text-xs uppercase tracking-wider">Status</th>
+                  <th className="font-semibold text-gray-500 text-xs uppercase tracking-wider">Amount</th>
+                  <th className="font-semibold text-gray-500 text-xs uppercase tracking-wider">Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="text-gray-700">
+                {recentOrders.map((order) => (
+                  <tr key={order._id} className="border-b border-gray-50 hover:bg-indigo-50/30 transition-colors">
+                    <td className="py-3 text-indigo-600 font-medium text-xs">{order.orderId}</td>
+                    <td className="text-gray-800">{order.customer}</td>
+                    <td className="text-gray-600">
+                      {order.product}
+                      {order.productCount > 1 && (
+                        <span className="text-gray-400 text-xs ml-1">+{order.productCount - 1}</span>
+                      )}
+                    </td>
+                    <td>
+                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold capitalize ${getStatusStyle(order.status)}`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td className="font-semibold text-gray-800">{formatCurrency(order.amount)}</td>
+                    <td className="text-gray-500 text-xs">{order.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <div className="text-center py-12 text-gray-400">
             <p className="text-4xl mb-2">📦</p>

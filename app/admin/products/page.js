@@ -20,7 +20,7 @@ export default function ProductsPage() {
     category: "",
     img: null,
     imgPreview: "",
-    variants: [{ size: "", color: "", img: "", price: "", availability: true }]
+    variants: [{ size: "", color: "", images: [], price: "", availability: true }]
   });
 
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
@@ -59,7 +59,7 @@ export default function ProductsPage() {
       category: "",
       img: null,
       imgPreview: "",
-      variants: [{ size: "", color: "", img: "", price: "", availability: true }]
+      variants: [{ size: "", color: "", images: [], price: "", availability: true }]
     });
     setError("");
     setShowModal(true);
@@ -76,7 +76,7 @@ export default function ProductsPage() {
       variants: product.variants.map(v => ({
         size: v.size,
         color: v.color,
-        img: v.img || "",
+        images: v.images && v.images.length > 0 ? v.images : (v.img ? [v.img] : []),
         price: v.price.toString(),
         availability: v.availability
       }))
@@ -100,8 +100,34 @@ export default function ProductsPage() {
   const addVariant = () => {
     setForm({
       ...form,
-      variants: [...form.variants, { size: "", color: "", img: "", price: "", availability: true }]
+      variants: [...form.variants, { size: "", color: "", images: [], price: "", availability: true }]
     });
+  };
+
+  const handleVariantImagesChange = (index, files) => {
+    if (!files || files.length === 0) return;
+    const fileArray = Array.from(files);
+    
+    const newImages = fileArray.map(file => ({
+      file,
+      preview: URL.createObjectURL(file)
+    }));
+
+    const updated = [...form.variants];
+    updated[index] = { 
+      ...updated[index], 
+      images: [...(updated[index].images || []), ...newImages] 
+    };
+    setForm({ ...form, variants: updated });
+  };
+
+  const removeVariantImage = (variantIndex, imageIndex) => {
+    const updated = [...form.variants];
+    updated[variantIndex] = {
+      ...updated[variantIndex],
+      images: updated[variantIndex].images.filter((_, i) => i !== imageIndex)
+    };
+    setForm({ ...form, variants: updated });
   };
 
   const removeVariant = (index) => {
@@ -139,10 +165,22 @@ export default function ProductsPage() {
       formData.append("description", form.description);
       formData.append("category", form.category);
       formData.append("variants", JSON.stringify(form.variants.map(v => ({
-        ...v,
+        size: v.size,
+        color: v.color,
         price: parseFloat(v.price),
-        availability: v.availability
+        availability: v.availability,
+        images: (v.images || []).filter(img => typeof img === 'string')
       }))));
+
+      form.variants.forEach((v, vIndex) => {
+        if (v.images && v.images.length > 0) {
+          v.images.forEach(img => {
+            if (img.file) {
+              formData.append(`variantImages_${vIndex}`, img.file);
+            }
+          });
+        }
+      });
 
       if (form.img) {
         formData.append("img", form.img);
@@ -207,7 +245,7 @@ export default function ProductsPage() {
   return (
     <>
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Products Management
@@ -225,7 +263,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Search */}
-      <div className="mb-6 flex gap-3">
+      <div className="mb-6 flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -473,7 +511,7 @@ export default function ProductsPage() {
                         )}
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <input
                           type="text"
                           placeholder="Size (e.g. M, L, XL)"
@@ -493,18 +531,41 @@ export default function ProductsPage() {
                         <input
                           type="number"
                           placeholder="Price"
-                          className="border border-gray-300 p-2 rounded-lg text-sm text-black focus:ring-2 focus:ring-indigo-500 outline-none"
+                          className="col-span-2 border border-gray-300 p-2 rounded-lg text-sm text-black focus:ring-2 focus:ring-indigo-500 outline-none"
                           value={variant.price}
                           onChange={(e) => updateVariant(index, "price", e.target.value)}
                           required
                         />
-                        <input
-                          type="text"
-                          placeholder="Image URL (optional)"
-                          className="border border-gray-300 p-2 rounded-lg text-sm text-black focus:ring-2 focus:ring-indigo-500 outline-none"
-                          value={variant.img}
-                          onChange={(e) => updateVariant(index, "img", e.target.value)}
-                        />
+
+                        <div className="col-span-2 mt-1">
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Variant Images</label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            className="w-full text-black text-sm border border-gray-300 p-1.5 rounded-lg bg-white"
+                            onChange={(e) => handleVariantImagesChange(index, e.target.files)}
+                          />
+                          {variant.images && variant.images.length > 0 && (
+                            <div className="flex gap-2 mt-2 flex-wrap">
+                              {variant.images.map((imgObj, imgIndex) => {
+                                const imgSrc = imgObj.preview || (typeof imgObj === 'string' ? imgObj : '');
+                                return (
+                                  <div key={imgIndex} className="relative group">
+                                    <img src={imgSrc} className="h-16 w-16 object-cover rounded-md border border-gray-200" alt="variant preview" />
+                                    <button
+                                      type="button"
+                                      onClick={() => removeVariantImage(index, imgIndex)}
+                                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity drop-shadow-md z-10"
+                                    >
+                                      <X size={12} />
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <label className="flex items-center gap-2 mt-3 text-sm text-gray-700 cursor-pointer">
