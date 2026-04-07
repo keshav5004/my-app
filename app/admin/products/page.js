@@ -114,10 +114,23 @@ export default function ProductsPage() {
     }));
 
     const updated = [...form.variants];
-    updated[index] = { 
-      ...updated[index], 
-      images: [...(updated[index].images || []), ...newImages] 
-    };
+    const currentImagesCount = updated[index].images ? updated[index].images.length : 0;
+    
+    if (currentImagesCount + newImages.length > 4) {
+      alert("You can only upload up to 4 photos per variant.");
+      // Take only what fits up to 4
+      const allowedNewImages = newImages.slice(0, 4 - currentImagesCount);
+      updated[index] = { 
+        ...updated[index], 
+        images: [...(updated[index].images || []), ...allowedNewImages] 
+      };
+    } else {
+      updated[index] = { 
+        ...updated[index], 
+        images: [...(updated[index].images || []), ...newImages] 
+      };
+    }
+    
     setForm({ ...form, variants: updated });
   };
 
@@ -186,11 +199,11 @@ export default function ProductsPage() {
         formData.append("img", form.img);
       }
 
-      let url = "http://localhost:3000/api/admin/products";
+      let url = "/api/products";
       let method = "POST";
 
       if (editingProduct) {
-        url = `http://localhost:3000/api/admin/products/${editingProduct._id}`;
+        url = `/api/products/${editingProduct._id}`;
         method = "PATCH";
       }
 
@@ -219,7 +232,7 @@ export default function ProductsPage() {
     if (!confirm("Are you sure you want to delete this product?")) return;
     setDeleting(id);
     try {
-      const res = await fetch(`http://localhost:3000/api/admin/products/${id}`, {
+      const res = await fetch(`/api/products/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -537,26 +550,34 @@ export default function ProductsPage() {
                           required
                         />
 
-                        <div className="col-span-2 mt-1">
-                          <label className="block text-xs font-medium text-gray-700 mb-1">Variant Images</label>
+                        <div className="col-span-2 mt-2 p-3 bg-white border border-gray-200 rounded-xl shadow-sm">
+                          <div className="flex justify-between items-center mb-1">
+                            <label className="block text-sm font-semibold text-gray-800">Variant Photos</label>
+                            <span className={`text-xs font-bold ${variant.images?.length === 4 ? 'text-green-600' : 'text-gray-500'}`}>
+                              {variant.images?.length || 0} / 4 uploaded
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-gray-400 mb-3">Add up to 4 photos for this variant.</p>
                           <input
                             type="file"
                             accept="image/*"
                             multiple
-                            className="w-full text-black text-sm border border-gray-300 p-1.5 rounded-lg bg-white"
+                            disabled={variant.images?.length >= 4}
+                            className="w-full text-black text-sm border border-gray-300 p-2 rounded-lg bg-gray-50 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                             onChange={(e) => handleVariantImagesChange(index, e.target.files)}
                           />
                           {variant.images && variant.images.length > 0 && (
-                            <div className="flex gap-2 mt-2 flex-wrap">
+                            <div className="flex gap-3 mt-3 flex-wrap">
                               {variant.images.map((imgObj, imgIndex) => {
                                 const imgSrc = imgObj.preview || (typeof imgObj === 'string' ? imgObj : '');
                                 return (
-                                  <div key={imgIndex} className="relative group">
+                                  <div key={imgIndex} className="relative group ring-2 ring-transparent hover:ring-indigo-200 rounded-md transition-all">
                                     <img src={imgSrc} className="h-16 w-16 object-cover rounded-md border border-gray-200" alt="variant preview" />
                                     <button
                                       type="button"
                                       onClick={() => removeVariantImage(index, imgIndex)}
-                                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity drop-shadow-md z-10"
+                                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity drop-shadow-md z-10 hover:bg-red-600 hover:scale-110"
+                                      title="Remove photo"
                                     >
                                       <X size={12} />
                                     </button>
